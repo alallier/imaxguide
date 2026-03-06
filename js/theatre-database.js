@@ -467,6 +467,8 @@ class TheatreDatabase {
     // Apply all active filters
     applyFilters() {
         let filtered = [...this.allTheatres];
+
+        const params = new URLSearchParams();
         
         // Region filter (for global view)
         const selectedRegion = document.getElementById('regionSelect')?.value;
@@ -477,24 +479,28 @@ class TheatreDatabase {
         // Country filter
         const selectedCountry = document.getElementById('countrySelect')?.value;
         if (selectedCountry) {
+            params.set('country', selectedCountry)
             filtered = filtered.filter(t => t.Country === selectedCountry);
         }
         
         // Admin division filter
         const selectedAdminDiv = document.getElementById('adminDivSelect')?.value;
         if (selectedAdminDiv) {
+            params.set('adminDivision', selectedAdminDiv)
             filtered = filtered.filter(t => t['Administrative Division'] === selectedAdminDiv);
         }
         
         // City filter
         const selectedCity = document.getElementById('citySelect')?.value;
         if (selectedCity) {
+            params.set('city', selectedCity)
             filtered = filtered.filter(t => t.City === selectedCity);
         }
         
         // Projector filter
         const selectedProjector = document.getElementById('projectorFilter')?.value;
         if (selectedProjector) {
+            params.set('projector', selectedProjector)
             filtered = filtered.filter(t => t['Digital Projector'] === selectedProjector);
         }
         
@@ -511,20 +517,25 @@ class TheatreDatabase {
         // Screen size filter
         const selectedScreenSize = document.getElementById('screenSizeFilter')?.value;
         if (selectedScreenSize) {
+            params.set('screenSize', selectedScreenSize)
             filtered = filtered.filter(t => this.matchesScreenSize(t, selectedScreenSize));
         }
         
         // Aspect ratio filter
         const selectedAspectRatio = document.getElementById('aspectRatioFilter')?.value;
         if (selectedAspectRatio) {
+            params.set('aspectRatio', aspectRatio)
             filtered = filtered.filter(t => this.matchesAspectRatio(t, selectedAspectRatio));
         }
         
         // Film capability filter
         const selectedFilmCapability = document.getElementById('filmCapabilityFilter')?.value;
         if (selectedFilmCapability) {
+            params.set('filmCapability', selectedFilmCapability)
             filtered = filtered.filter(t => this.matchesFilmCapability(t, selectedFilmCapability));
         }
+
+        history.replaceState(null, "", "?" + params.toString());
         
         this.filteredTheatres = filtered;
         this.renderTable();
